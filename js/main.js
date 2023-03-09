@@ -27,7 +27,8 @@ Vue.component('product-review', {
    </select>
  </p>
  <p>
-   <input type="submit" value="Submit"> 
+   <input type="submit" value="Submit">
+   <input type="reset" value="кнопка сброса">
  </p>
 </form>
  `,
@@ -36,7 +37,8 @@ Vue.component('product-review', {
             name: null,
             review: null,
             rating: null,
-            errors: []
+            errors: [],
+
         }
     },
     methods:{
@@ -175,6 +177,9 @@ Vue.component('product', {
         eventBus.$on('review-submitted', productReview => {
             this.reviews.push(productReview)
         })
+        // eventBus.$on('review-submitted', productReview => {
+        //     this.reviews.pop(delReview)
+        // })
     }
 })
 
@@ -210,7 +215,12 @@ Vue.component('product-tabs', {
         <div v-show="selectedTab === 'Make a Review'">
           <product-review></product-review>
         </div>
-    
+        <button class="delReview"
+                   v-on:click="delReview"
+                   :key="index"
+           >
+               delReview
+        </button>
       </div>
 `,
     data() {
@@ -233,6 +243,9 @@ let app = new Vue({
         },
         reduceToCart(id){
             this.cart.pop(id);
+        },
+        delReview(index) {
+            this.delReview.pop(index);
         }
     }
 })

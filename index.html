@@ -15,7 +15,7 @@
     <div class="cart">
         <p>Cart({{ cart.length }})</p>
     </div>
-    <product :premium="premium" @add-to-cart="updateCart" @reduce-to-cart="reduceToCart" @click="selectedTab = tab"></product>
+    <product :premium="premium" @add-to-cart="updateCart" @reduce-to-cart="reduceToCart" @del-Review="delReview" @click="selectedTab = tab"></product>
 </div>
 </body>
 </html>
