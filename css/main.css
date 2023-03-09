@@ -8,6 +8,7 @@ body {
     background: linear-gradient(-90deg, #84CF6A, #16C0B0);
     height: 60px;
     margin-bottom: 15px;
+
 }
 
 .product {
@@ -37,6 +38,7 @@ img {
     width: 40px;
     height: 40px;
     margin-top: 5px;
+    border-radius: 20px;
 }
 
 .cart {
@@ -92,3 +94,12 @@ textarea {
     text-decoration: line-through;
 }
 
+.reduceToCart {
+    margin-top: 30px;
+    border: none;
+    background-color: red;
+    color: white;
+    height: 40px;
+    width: 100px;
+    font-size: 14px;
+}
