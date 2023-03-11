@@ -63,12 +63,6 @@ Vue.component('product-review', {
 })
 
 Vue.component('product', {
-    props: {
-        premium: {
-            type: Boolean,
-            required: true
-        }
-    },
     template: `
    <div class="product">
     <div class="product-image">
@@ -80,11 +74,8 @@ Vue.component('product', {
            <p v-if="inventory > 10">In stock</p>
            <p v-else-if="inventory <= 10 && inventory > 0">Almost sold out!</p>
            <p v-else class="text-decoration">Out of stock</p>
-           <ul>
-               <li v-for="detail in details">{{ detail }}</li>
-           </ul>
-           
           <p>Shipping: {{ shipping }}</p>
+          <product-details :details="details"></product-details>
            <div
                    class="color-box"
                    v-for="(variant, index) in variants"
@@ -132,13 +123,15 @@ Vue.component('product', {
                     variantId: 2234,
                     variantColor: 'green',
                     variantImage: "./assets/vmSocks-green-onWhite.jpg",
-                    variantQuantity: 10
+                    variantQuantity: 10,
+                    onSale: true,
                 },
                 {
                     variantId: 2235,
                     variantColor: 'blue',
                     variantImage: "./assets/vmSocks-blue-onWhite.jpg",
-                    variantQuantity: 0
+                    variantQuantity: 0,
+                    onSale: false,
                 }
             ],
             reviews: []
@@ -158,7 +151,12 @@ Vue.component('product', {
     },
     computed: {
         title() {
-            return this.brand + ' ' + this.product;
+            if (this.variants[this.selectedVariant].onSale){
+                return this.brand + ' ' + this.product + ' ' + 'Sale';
+            }else {
+                return this.brand + ' ' + this.product;
+            }
+
         },
         image() {
             return this.variants[this.selectedVariant].variantImage;
@@ -174,6 +172,7 @@ Vue.component('product', {
             }
         }
     },
+
     mounted() {
         eventBus.$on('review-submitted', productReview => {
             this.reviews.push(productReview)
@@ -184,6 +183,19 @@ Vue.component('product', {
     }
 })
 
+Vue.component('product-details', {
+    props: {
+        details: {
+            type: Array,
+            required: true
+        }
+    },
+    template: `
+    <ul>
+        <li v-for="detail in details">{{ detail }}</li>
+    </ul>
+ `,
+})
 
 Vue.component('product-tabs', {
     props: {
@@ -231,16 +243,19 @@ Vue.component('product-tabs', {
         }
     },
     methods: {
-        delReview(index) {
-            this.delReview.pop(index);
+        delReview: function(index) {
+            this.reviews.splice(index, 1);
         },
     }
 })
+
+
 
 let app = new Vue({
     el: '#app',
     data: {
         premium: true,
+        details: true,
         cart: []
     },
     methods: {
