@@ -16,6 +16,14 @@ Vue.component('product-review', {
    <label for="review">Review:</label>
    <textarea id="review" v-model="review"></textarea>
  </p>
+ <p>«Would you recommend this product?».</p>
+ <div class="p">
+       <label for="positive">Yes</label>    
+       <input v-model="answer" type="radio" id="positive" name="answer" value="positive">
+       <label for="positive">No</label>
+       <input v-model="answer" type="radio" id="negative" name="answer" value="negative">
+   <br>
+</div>
  <p>
    <label for="rating">Rating:</label>
    <select id="rating" v-model.number="rating">
@@ -37,26 +45,30 @@ Vue.component('product-review', {
             name: null,
             review: null,
             rating: null,
+            answer: null,
             errors: [],
 
         }
     },
     methods: {
         onSubmit() {
-            if (this.name && this.review && this.rating) {
+            if (this.name && this.review && this.rating && this.answer) {
                 let productReview = {
                     name: this.name,
                     review: this.review,
-                    rating: this.rating
+                    rating: this.rating,
+                    answer: this.answer
                 }
                 eventBus.$emit('review-submitted', productReview)
                 this.name = null
                 this.review = null
                 this.rating = null
+                this.answer = null
             } else {
                 if (!this.name) this.errors.push("Name required.")
                 if (!this.review) this.errors.push("Review required.")
                 if (!this.rating) this.errors.push("Rating required.")
+                if (!this.answer) this.errors.push("You would recommend or not?!")
             }
         }
     }
@@ -148,6 +160,9 @@ Vue.component('product', {
             this.selectedVariant = index;
             console.log(index);
         },
+        addReview(productReview) {
+            this.reviews.push(productReview)
+        }
     },
     computed: {
         title() {
@@ -177,9 +192,6 @@ Vue.component('product', {
         eventBus.$on('review-submitted', productReview => {
             this.reviews.push(productReview)
         })
-        // eventBus.$on('del-Review', productReview => {
-        //     this.reviews.pop(productReview)
-        // })
     }
 })
 
@@ -249,8 +261,6 @@ Vue.component('product-tabs', {
     }
 })
 
-
-
 let app = new Vue({
     el: '#app',
     data: {
@@ -270,6 +280,3 @@ let app = new Vue({
         }
     }
 })
-
-
-
