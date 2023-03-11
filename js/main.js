@@ -28,7 +28,7 @@ Vue.component('product-review', {
  </p>
  <p>
    <input type="submit" value="Submit">
-   <input type="reset" value="кнопка сброса">
+   <input type="reset" value="Reset">
  </p>
 </form>
  `,
@@ -41,9 +41,9 @@ Vue.component('product-review', {
 
         }
     },
-    methods:{
+    methods: {
         onSubmit() {
-            if(this.name && this.review && this.rating) {
+            if (this.name && this.review && this.rating) {
                 let productReview = {
                     name: this.name,
                     review: this.review,
@@ -54,9 +54,9 @@ Vue.component('product-review', {
                 this.review = null
                 this.rating = null
             } else {
-                if(!this.name) this.errors.push("Name required.")
-                if(!this.review) this.errors.push("Review required.")
-                if(!this.rating) this.errors.push("Rating required.")
+                if (!this.name) this.errors.push("Name required.")
+                if (!this.review) this.errors.push("Review required.")
+                if (!this.rating) this.errors.push("Rating required.")
             }
         }
     }
@@ -114,7 +114,8 @@ Vue.component('product', {
            </button><br>
            <br><a v-bind:href="link">{{altText}}</a>
        </div>
-       <product-tabs :reviews="reviews"></product-tabs>           
+       <product-tabs :reviews="reviews"></product-tabs>
+    </div>    
  `,
     data() {
         return {
@@ -173,12 +174,12 @@ Vue.component('product', {
             }
         }
     },
-    mounted(){
+    mounted() {
         eventBus.$on('review-submitted', productReview => {
             this.reviews.push(productReview)
         })
-        // eventBus.$on('review-submitted', productReview => {
-        //     this.reviews.pop(delReview)
+        // eventBus.$on('del-Review', productReview => {
+        //     this.reviews.pop(productReview)
         // })
     }
 })
@@ -209,18 +210,18 @@ Vue.component('product-tabs', {
                   <p>{{ review.name }}</p>
                   <p>Rating:{{ review.rating }}</p>
                   <p>{{ review.review }}</p>
+                  <button class="delReview"
+                   v-on:click="delReview(index)"
+                  >
+                   delReview
+                  </button>
                 </li>
             </ul>
         </div>
         <div v-show="selectedTab === 'Make a Review'">
           <product-review></product-review>
         </div>
-        <button class="delReview"
-                   v-on:click="delReview"
-                   :key="index"
-           >
-               delReview
-        </button>
+
       </div>
 `,
     data() {
@@ -228,6 +229,11 @@ Vue.component('product-tabs', {
             tabs: ['Reviews', 'Make a Review'],
             selectedTab: 'Reviews'  // устанавливается с помощью @click
         }
+    },
+    methods: {
+        delReview(index) {
+            this.delReview.pop(index);
+        },
     }
 })
 
@@ -238,14 +244,14 @@ let app = new Vue({
         cart: []
     },
     methods: {
+        delReview(index) {
+            this.delReview.pop(index);
+        },
         updateCart(id) {
             this.cart.push(id);
         },
-        reduceToCart(id){
+        reduceToCart(id) {
             this.cart.pop(id);
-        },
-        delReview(index) {
-            this.delReview.pop(index);
         }
     }
 })
